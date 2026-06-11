@@ -1,0 +1,59 @@
+\frametitle{TCGA via GDC: Open Dataset \& Research Hypothesis}
+
+\begin{columns}[T]
+\begin{column}{0.48\textwidth}
+
+\begin{block}{\faDatabase\ \ What TCGA/GDC Provides}
+\scriptsize
+\begin{itemize}\setlength{\itemsep}{2pt}
+    \item \textbf{Pathology Reports:} Free-text surgical/pathology PDFs for 33 cancer types ($\sim$11{,}000 cases)
+    \item \textbf{Structured TNM:} AJCC stage, T/N/M fields, histology, grade per case
+    \item \textbf{Clinical Outcomes:} Overall survival, disease-free survival, treatment records
+    \item \textbf{Multi-omics:} Genomics, proteomics, imaging  extensible for future fusion
+    \item \textbf{Open Access:} Programmatic REST API + \texttt{gdc-client} Python library; no credentials for open-tier data
+\end{itemize}
+\end{block}
+
+\begin{exampleblock}{\faCode\ \ Programmatic Access}
+\tiny
+\begin{verbatim}
+POST https://api.gdc.cancer.gov/files
+{
+  "filters": {
+    "op": "and", "content": [
+      {"op":"=","content":{
+        "field":"cases.project.project_id",
+        "value":"TCGA-BRCA"}},
+      {"op":"=","content":{
+        "field":"data_type",
+        "value":"Pathology Report"}}
+    ]
+  },
+  "fields": "file_id,cases.diagnoses.tumor_stage"
+}
+\end{verbatim}
+\end{exampleblock}
+
+\end{column}
+
+\begin{column}{0.50\textwidth}
+
+\begin{alertblock}{\faFlask\ \ TCGA-Grounded Hypothesis}
+\scriptsize
+\textit{``By applying the DT Health Pathology NLP pipeline to \textbf{TCGA open-access pathology reports}, we hypothesise that LLM-extracted TNM fields will achieve \textbf{F1 $\geq$ 0.85} against the structured AJCC ground truth labels already present in GDC, and that the resulting cross-referenced knowledge graph will reveal \textbf{statistically significant associations} between report-derived biomarkers and survival outcomes across $\geq$3 cancer types  validating the pipeline at scale before deployment on proprietary institutional data.''}
+\end{alertblock}
+
+\vspace{4pt}
+\begin{block}{\faCheckCircle\ \ Why TCGA is Ideal for Validation}
+\scriptsize
+\begin{itemize}\setlength{\itemsep}{2pt}
+    \item Ground-truth TNM labels $\rightarrow$ direct F1 / AJCC consistency measurement
+    \item Free-text reports + structured outcomes $\rightarrow$ end-to-end prognosis pipeline test
+    \item Multi-cancer scope $\rightarrow$ tests generalization before clinical deployment
+    \item No PHI barrier for open tier $\rightarrow$ fast iteration and reproducibility
+\end{itemize}
+\end{block}
+
+\end{column}
+\end{columns}
+
